@@ -5,6 +5,11 @@ import android.app.Application;
 import com.firebase.client.Firebase;
 
 import net.tjtorrico.photofeed.domain.di.DomainModule;
+import net.tjtorrico.photofeed.libs.di.LibsModule;
+import net.tjtorrico.photofeed.login.di.DaggerLoginComponent;
+import net.tjtorrico.photofeed.login.di.LoginComponent;
+import net.tjtorrico.photofeed.login.di.LoginModule;
+import net.tjtorrico.photofeed.login.ui.LoginView;
 
 /**
  * Created by TJT on 01/07/2016.
@@ -43,7 +48,13 @@ public class PhotoFeedApp extends Application {
         return SHARED_PREFERENCES_NAME;
     }
 
-    public String getFirebaseUrl() {
-        return FIREBASE_URL;
+    public LoginComponent getLoginComponent (LoginView view){
+        return DaggerLoginComponent
+                .builder()
+                .photoFeedAppModule(photoFeedAppModule)
+                .domainModule(domainModule)
+                .libsModule(new LibsModule(null))
+                .loginModule(new LoginModule(view))
+                .build();
     }
 }

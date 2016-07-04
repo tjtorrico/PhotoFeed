@@ -18,39 +18,33 @@ import dagger.Provides;
  */
 @Module
 public class DomainModule {
-    String firebaseURL;
+    private String FIREBASE_URL = "https://photofeed-tjt.firebaseio.com/";
 
-    public DomainModule(String firebaseURL) {
-        this.firebaseURL = firebaseURL;
+    public DomainModule(String FIREBASE_URL) {
+        this.FIREBASE_URL = FIREBASE_URL;
     }
 
     @Provides
     @Singleton
-    FirebaseAPI providesFirebaseAPI(Firebase firebase){
+    FirebaseAPI providesFirebaseAPI(Firebase firebase) {
         return new FirebaseAPI(firebase);
     }
 
     @Provides
     @Singleton
-    Firebase providesFirebase(String firebaseURL){
-        return new Firebase(firebaseURL);
+    Firebase providesFirebase() {
+        return new Firebase(FIREBASE_URL);
     }
 
     @Provides
     @Singleton
-    String providesFirebaseURL(){
-        return this.firebaseURL;
-    }
-
-    @Provides
-    @Singleton
-    Util providesUtil(Geocoder geocoder){
+    Util providesUtil(Geocoder geocoder) {
         return new Util(geocoder);
     }
 
     @Provides
     @Singleton
-    Geocoder providesGeocoder(Context context){
+    Geocoder providesGeocoder(Context context) {
         return new Geocoder(context);
     }
 }

@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import net.tjtorrico.photofeed.MainActivity;
+import net.tjtorrico.photofeed.main.ui.MainActivity;
 import net.tjtorrico.photofeed.PhotoFeedApp;
 import net.tjtorrico.photofeed.R;
 import net.tjtorrico.photofeed.login.LoginPresenter;

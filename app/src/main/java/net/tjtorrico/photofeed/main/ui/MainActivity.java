@@ -51,6 +51,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -65,8 +67,11 @@ public class MainActivity extends AppCompatActivity implements MainView,
     @Bind(R.id.viewPager)
     ViewPager viewPager;
 
+    @Inject
     MainPresenter presenter;
+    @Inject
     MainSectionsPagerAdapter adapter;
+    @Inject
     SharedPreferences sharedPreferences;
 
     private String photoPath;
@@ -120,36 +125,9 @@ public class MainActivity extends AppCompatActivity implements MainView,
         Fragment[] fragments = new Fragment[]{new PhotoListFragment(),
                 new PhotoMapFragment()};
 
-        adapter = new MainSectionsPagerAdapter(getSupportFragmentManager(), fragments, titles);
-        sharedPreferences = getSharedPreferences(app.getSharedPreferencesName(), MODE_PRIVATE);
-        presenter = new MainPresenter() {
-            @Override
-            public void onCreate() {
+        app.getMainComponent(this, getSupportFragmentManager(), fragments, titles)
+        .inject(this);
 
-            }
-
-            @Override
-            public void onDestroy() {
-
-            }
-
-            @Override
-            public void logout() {
-
-            }
-
-            @Override
-            public void uploadPhoto(Location location, String path) {
-                if(path != null){
-                    showSnackbar(path);
-                }
-            }
-
-            @Override
-            public void onEventMainThread(MainEvent event) {
-
-            }
-        };
     }
 
     @Override
@@ -180,10 +158,10 @@ public class MainActivity extends AppCompatActivity implements MainView,
                     apiClient.connect();
                 }
             }
-        } else if(resultCode == REQUEST_PICTURE){
-            if(resultCode == RESULT_OK){
+        } else if (resultCode == REQUEST_PICTURE) {
+            if (resultCode == RESULT_OK) {
                 boolean fromCamera = (data == null || data.getData() == null);
-                if(fromCamera){
+                if (fromCamera) {
                     addGallery();
                 } else {
                     photoPath = getRealPathFromURI(data.getData());
@@ -225,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements MainView,
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                                                Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
+                        Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
             }
             return;
         }
@@ -276,53 +254,53 @@ public class MainActivity extends AppCompatActivity implements MainView,
 
     @Override
     public void onUploadInit() {
-
+        showSnackbar(R.string.main_notice_upload_init);
     }
 
     @Override
     public void onUploadComplete() {
-
+        showSnackbar(R.string.main_notice_upload_complete);
     }
 
     @Override
     public void onUploadError(String error) {
-
+        showSnackbar(error);
     }
 
     @OnClick(R.id.fab)
-    public void takePicture(){
+    public void takePicture() {
         Intent chooserIntent = null;
 
         List<Intent> intentList = new ArrayList<>();
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra("return-data",true);
+        cameraIntent.putExtra("return-data", true);
 
         File photoFile = getFile();
-        if(photoFile != null){
+        if (photoFile != null) {
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-            if(cameraIntent.resolveActivity(getPackageManager()) != null){
+            if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                 intentList = addIntentsToList(intentList, cameraIntent);
             }
         }
 
-        if(pickIntent.resolveActivity(getPackageManager()) != null){
+        if (pickIntent.resolveActivity(getPackageManager()) != null) {
             intentList = addIntentsToList(intentList, pickIntent);
         }
 
-        if(intentList.size() > 0){
+        if (intentList.size() > 0) {
             chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
-                                                getString(R.string.main_message_picture_source));
+                    getString(R.string.main_message_picture_source));
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
         }
 
-        if(chooserIntent != null){
+        if (chooserIntent != null) {
             startActivityForResult(chooserIntent, REQUEST_PICTURE);
         }
     }
 
-    private File getFile(){
+    private File getFile() {
         File photoFile = null;
         try {
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -361,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements MainView,
         if (cursor == null) {
             result = contentURI.getPath();
         } else {
-            if (contentURI.toString().contains("mediaKey")){
+            if (contentURI.toString().contains("mediaKey")) {
                 cursor.close();
 
                 try {
@@ -396,11 +374,11 @@ public class MainActivity extends AppCompatActivity implements MainView,
         return result;
     }
 
-    private void showSnackbar(String msg){
+    private void showSnackbar(String msg) {
         Snackbar.make(viewPager, msg, Snackbar.LENGTH_SHORT).show();
     }
 
-    private void showSnackbar(int strResource){
+    private void showSnackbar(int strResource) {
         Snackbar.make(viewPager, strResource, Snackbar.LENGTH_SHORT).show();
     }
 }

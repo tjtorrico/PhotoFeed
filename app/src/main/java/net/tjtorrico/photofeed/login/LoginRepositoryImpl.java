@@ -1,7 +1,5 @@
 package net.tjtorrico.photofeed.login;
 
-import android.support.annotation.NonNull;
-
 import com.firebase.client.FirebaseError;
 
 import net.tjtorrico.photofeed.domain.FirebaseAPI;

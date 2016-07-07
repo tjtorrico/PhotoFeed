@@ -32,12 +32,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import net.tjtorrico.photofeed.PhotoFeedApp;
-import net.tjtorrico.photofeed.PhotoListFragment;
+import net.tjtorrico.photofeed.photolist.ui.PhotoListFragment;
 import net.tjtorrico.photofeed.PhotoMapFragment;
 import net.tjtorrico.photofeed.R;
 import net.tjtorrico.photofeed.login.ui.LoginActivity;
 import net.tjtorrico.photofeed.main.MainPresenter;
-import net.tjtorrico.photofeed.main.events.MainEvent;
 import net.tjtorrico.photofeed.main.ui.adapter.MainSectionsPagerAdapter;
 
 import java.io.File;
@@ -45,7 +44,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

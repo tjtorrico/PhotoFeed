@@ -27,7 +27,7 @@ import dagger.Provides;
  */
 @Module
 public class LibsModule {
-    Fragment fragment;
+    private Fragment fragment;
 
     public LibsModule(Fragment fragment) {
         this.fragment = fragment;
@@ -35,10 +35,10 @@ public class LibsModule {
 
     @Provides
     @Singleton
-    ImageLoader provideImageLoader(Activity activity) {
+    ImageLoader provideImageLoader(Fragment fragment) {
         GlideImageLoader imageLoader = new GlideImageLoader();
-        if (activity != null) {
-            imageLoader.setLoaderContext(activity);
+        if (fragment != null) {
+            imageLoader.setLoaderContext(fragment);
         }
         return imageLoader;
     }
@@ -66,7 +66,6 @@ public class LibsModule {
     org.greenrobot.eventbus.EventBus providesLibraryEventBus(){
         return org.greenrobot.eventbus.EventBus.getDefault();
     }
-
 
     @Provides
     @Singleton

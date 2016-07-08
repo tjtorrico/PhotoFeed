@@ -13,9 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 
@@ -38,14 +38,12 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class PhotoListFragment extends Fragment implements PhotoListView, OnItemClickListener {
-
-
+    @Bind(R.id.container)
+    RelativeLayout container;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
-    @Bind(R.id.container)
-    FrameLayout container;
 
     @Inject
     PhotoListAdapter adapter;
@@ -53,7 +51,6 @@ public class PhotoListFragment extends Fragment implements PhotoListView, OnItem
     PhotoListPresenter presenter;
 
     public PhotoListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -77,25 +74,22 @@ public class PhotoListFragment extends Fragment implements PhotoListView, OnItem
 
     private void setupInjection() {
         PhotoFeedApp app = (PhotoFeedApp) getActivity().getApplication();
-        //app.getPhotoListComponent(this, this, this).inject(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+        app.getPhotoListComponent(this, this, this).inject(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_photo_list, container, false);
         ButterKnife.bind(this, view);
-
         setupRecyclerView();
         presenter.subscribe();
         return view;
+    }
+
+    @Override
+    public void onPhotosError(String error) {
+        Snackbar.make(container, error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -129,14 +123,9 @@ public class PhotoListFragment extends Fragment implements PhotoListView, OnItem
     }
 
     @Override
-    public void onPhotosError(String error) {
-        Snackbar.make(container, error, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onPlaceClick(Photo photo) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("geo:" + photo.getLatitutde() +"," + photo.getLongitude()));
+        intent.setData(Uri.parse("geo:" + photo.getLatitutde() + "," + photo.getLongitude()));
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(intent);
         }
@@ -144,14 +133,14 @@ public class PhotoListFragment extends Fragment implements PhotoListView, OnItem
 
     @Override
     public void onShareClick(Photo photo, ImageView img) {
-        Bitmap bitmap = ((GlideBitmapDrawable)img.getDrawable()).getBitmap();
+        Bitmap bitmap = ((GlideBitmapDrawable) img.getDrawable()).getBitmap();
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, null, null);
-        Uri imageUri =  Uri.parse(path);
+        Uri imageUri = Uri.parse(path);
 
         share.putExtra(Intent.EXTRA_STREAM, imageUri);
         startActivity(Intent.createChooser(share, getString(R.string.photolist_message_share)));

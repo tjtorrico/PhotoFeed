@@ -1,6 +1,7 @@
 package net.tjtorrico.photofeed.libs;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -18,8 +19,8 @@ public class GlideImageLoader implements ImageLoader {
     private RequestManager glideRequestManager;
     private RequestListener onFinishedLoadingListener;
 
-    public void setLoaderContext(Activity activity) {
-        this.glideRequestManager = Glide.with(activity);
+    public void setLoaderContext(Fragment fragment) {
+        this.glideRequestManager = Glide.with(fragment);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class GlideImageLoader implements ImageLoader {
             glideRequestManager
                     .load(URL)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .override(700, 700)
                     .centerCrop()
                     .into(imageView);
         }

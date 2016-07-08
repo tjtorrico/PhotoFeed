@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements MainView,
                     apiClient.connect();
                 }
             }
-        } else if (resultCode == REQUEST_PICTURE) {
+        } else if (requestCode == REQUEST_PICTURE) {
             if (resultCode == RESULT_OK) {
                 boolean fromCamera = (data == null || data.getData() == null);
                 if (fromCamera) {
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements MainView,
         }
 
         if (chooserIntent != null) {
-            startActivityForResult(chooserIntent, REQUEST_PICTURE);
+                startActivityForResult(chooserIntent, REQUEST_PICTURE);
         }
     }
 

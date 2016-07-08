@@ -41,6 +41,7 @@ public class MainRepositoryImpl implements MainRepository{
             photo.setLongitude(location.getLongitude());
         }
         post(MainEvent.UPLOAD_INIT);
+
         ImageStorageFinishedListener listener = new ImageStorageFinishedListener() {
             @Override
             public void onSuccess() {

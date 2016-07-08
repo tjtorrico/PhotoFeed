@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
+import net.tjtorrico.photofeed.libs.base.EventBus;
 import net.tjtorrico.photofeed.libs.base.ImageStorage;
 import net.tjtorrico.photofeed.libs.base.ImageStorageFinishedListener;
 
@@ -33,7 +34,7 @@ public class CloudinaryImageStorage implements ImageStorage {
             boolean success = false;
             @Override
             protected Void doInBackground(Void... voids) {
-                Map params = ObjectUtils.asMap("", id);
+                Map params = ObjectUtils.asMap("public_id", id);
                 try {
                     cloudinary.uploader().upload(file, params);
                     success = true;
@@ -48,7 +49,6 @@ public class CloudinaryImageStorage implements ImageStorage {
                 if(success){
                     listener.onSuccess();
                 }
-                //super.onPostExecute(aVoid);
             }
         }.execute();
     }

@@ -48,7 +48,6 @@ public class MainPresenterImpl implements MainPresenter{
     @Override
     @Subscribe
     public void onEventMainThread(MainEvent event) {
-        String error = event.getError();
         if(this.view != null){
             switch (event.getType()){
                 case MainEvent.UPLOAD_INIT:

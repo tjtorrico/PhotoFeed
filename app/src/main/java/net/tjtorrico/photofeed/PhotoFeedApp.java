@@ -16,6 +16,12 @@ import net.tjtorrico.photofeed.main.di.DaggerMainComponent;
 import net.tjtorrico.photofeed.main.di.MainComponent;
 import net.tjtorrico.photofeed.main.di.MainModule;
 import net.tjtorrico.photofeed.main.ui.MainView;
+import net.tjtorrico.photofeed.photolist.di.DaggerPhotoListComponent;
+import net.tjtorrico.photofeed.photolist.di.PhotoListComponent;
+import net.tjtorrico.photofeed.photolist.di.PhotoListModule;
+import net.tjtorrico.photofeed.photolist.ui.PhotoListFragment;
+import net.tjtorrico.photofeed.photolist.ui.PhotoListView;
+import net.tjtorrico.photofeed.photolist.ui.adapters.OnItemClickListener;
 
 /**
  * Created by TJT on 01/07/2016.
@@ -27,7 +33,6 @@ public class PhotoFeedApp extends Application {
 
     private DomainModule domainModule;
     private PhotoFeedAppModule photoFeedAppModule;
-
 
     @Override
     public void onCreate() {
@@ -71,6 +76,16 @@ public class PhotoFeedApp extends Application {
                 .domainModule(domainModule)
                 .libsModule(new LibsModule(null))
                 .mainModule(new MainModule(view, titles, fragments, manager))
+                .build();
+    }
+
+    public PhotoListComponent getPhotoListComponent(PhotoListFragment fragment, PhotoListView view, OnItemClickListener onItemClickListener) {
+        return DaggerPhotoListComponent
+                .builder()
+                .photoFeedAppModule(photoFeedAppModule)
+                .domainModule(domainModule)
+                .libsModule(new LibsModule(fragment))
+                .photoListModule(new PhotoListModule(view, onItemClickListener))
                 .build();
     }
 }

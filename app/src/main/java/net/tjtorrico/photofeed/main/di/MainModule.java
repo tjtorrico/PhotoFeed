@@ -45,43 +45,51 @@ public class MainModule {
         return this.view;
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     MainPresenter providesMainPresenter(MainView view, EventBus eventBus, UploadInteractor uploadInteractor, SessionInteractor sessionInteractor) {
         return new MainPresenterImpl(view, eventBus, uploadInteractor, sessionInteractor);
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     UploadInteractor providesUploadInteractor(MainRepository repository) {
         return new UploadInteractorImpl(repository);
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     SessionInteractor providesSessionInteractor(MainRepository repository) {
         return new SessionInteractorImpl(repository);
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     MainRepository providesMainRepository(EventBus eventBus, FirebaseAPI firebase, ImageStorage imageStorage) {
         return new MainRepositoryImpl(eventBus, firebase, imageStorage);
     }
 
-    @Provides @Singleton
-    MainSectionsPagerAdapter providesAdapter(FragmentManager fm, Fragment[] fragments, String[] titles){
+    @Provides
+    @Singleton
+    MainSectionsPagerAdapter providesMainSectionsPagerAdapter(FragmentManager fm, Fragment[] fragments, String[] titles) {
         return new MainSectionsPagerAdapter(fm, fragments, titles);
     }
 
-    @Provides @Singleton
-    FragmentManager providesAdapterFragmentManager(){
+    @Provides
+    @Singleton
+    FragmentManager providesFragmentManager() {
         return this.fragmentManager;
     }
 
-    @Provides @Singleton
-    Fragment[] providesFragmentArrayForAdapter(){
+    @Provides
+    @Singleton
+    Fragment[] providesFragmentArrayForAdapter() {
         return this.fragments;
     }
 
-    @Provides @Singleton
-    String[] providesStringArrayForAdapter(){
+    @Provides
+    @Singleton
+    String[] providesStringArrayForAdapter() {
         return this.titles;
     }
 }

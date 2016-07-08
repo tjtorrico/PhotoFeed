@@ -32,17 +32,20 @@ public class LoginModule {
         return this.view;
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     LoginPresenter providesLoginPresenter(EventBus eventBus, LoginView loginView, LoginInteractor loginInteractor) {
         return new LoginPresenterImpl(eventBus, loginView, loginInteractor);
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     LoginInteractor providesLoginInteractor(LoginRepository repository) {
         return new LoginInteractorImpl(repository);
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     LoginRepository providesLoginRepository(EventBus eventBus, FirebaseAPI firebase) {
         return new LoginRepositoryImpl(eventBus, firebase);
     }

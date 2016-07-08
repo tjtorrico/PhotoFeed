@@ -22,6 +22,11 @@ import net.tjtorrico.photofeed.photolist.di.PhotoListModule;
 import net.tjtorrico.photofeed.photolist.ui.PhotoListFragment;
 import net.tjtorrico.photofeed.photolist.ui.PhotoListView;
 import net.tjtorrico.photofeed.photolist.ui.adapters.OnItemClickListener;
+import net.tjtorrico.photofeed.photomap.di.DaggerPhotoMapComponent;
+import net.tjtorrico.photofeed.photomap.di.PhotoMapComponent;
+import net.tjtorrico.photofeed.photomap.di.PhotoMapModule;
+import net.tjtorrico.photofeed.photomap.ui.PhotoMapFragment;
+import net.tjtorrico.photofeed.photomap.ui.PhotoMapView;
 
 /**
  * Created by TJT on 01/07/2016.
@@ -88,4 +93,15 @@ public class PhotoFeedApp extends Application {
                 .photoListModule(new PhotoListModule(view, onItemClickListener))
                 .build();
     }
+
+    public PhotoMapComponent getPhotoMapComponent(PhotoMapFragment fragment, PhotoMapView view) {
+        return DaggerPhotoMapComponent
+                .builder()
+                .photoFeedAppModule(photoFeedAppModule)
+                .domainModule(domainModule)
+                .libsModule(new LibsModule(fragment))
+                .photoMapModule(new PhotoMapModule(view))
+                .build();
+    }
+
 }

@@ -33,7 +33,7 @@ import com.google.android.gms.location.LocationServices;
 
 import net.tjtorrico.photofeed.PhotoFeedApp;
 import net.tjtorrico.photofeed.photolist.ui.PhotoListFragment;
-import net.tjtorrico.photofeed.PhotoMapFragment;
+import net.tjtorrico.photofeed.photomap.ui.PhotoMapFragment;
 import net.tjtorrico.photofeed.R;
 import net.tjtorrico.photofeed.login.ui.LoginActivity;
 import net.tjtorrico.photofeed.main.MainPresenter;
